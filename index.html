@@ -1,0 +1,157 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-03-19 22:14:32
+ * @LastEditTime: 2021-03-22 10:39:19
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /Demo/finance-month.html
+-->
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echarts</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.2/echarts.common.js"></script>
+    <style>
+        .my-card {
+            display: block;
+            width: 600px;
+            border: 1px solid #ddd;
+            margin: 20px auto;
+            border-radius: 5px;
+        }
+        .my-card .card-header {
+            height: 50px;
+            line-height: 50px;
+            padding: 0 20px;
+            border-bottom: 1px solid #ddd;
+            user-select: none;
+        }
+        
+        .my-card .card-content {
+            min-height: 300px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="my-card">
+        <div class="card-header">图表1</div>
+        <div class="card-content" id="chart1"></div>
+    </div>
+    <div class="my-card">
+        <div class="card-header">图表2</div>
+        <div class="card-content" id="chart2"></div>
+    </div>
+
+    <div class="my-card">
+        <div class="card-header">图表3</div>
+        <div class="card-content" id="chart3"></div>
+    </div>
+
+    <script src="./utils.js"></script>
+    <script src="./charts-class.js"></script>
+    <script src="./chart-factory.js"></script>
+    <script>
+        var chartFactory = null; //图表工厂
+        function _init() {
+            chartFactory = initChart();  //初始化图表
+        }
+
+        /**
+         * 初始化图表
+         * @return {Object} 图表工厂
+         */
+        function initChart() {
+            var chartFactory = new ChartFactory();  //图表工厂
+            chartFactory.batchCreate([
+                //产品销量类别走势
+                {
+                    type: 'MORE_TREND_LINE',
+                    wrapId: '#chart1',
+                    data: function (cb) {
+                        var _self = this;
+                        var  data = {
+                            yUnit: "测试",
+                            xAxis: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                            legend: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎'],
+                            series: [
+                                {
+                                    name: '邮件营销',
+                                    type: 'line',
+                                    stack: '总量',
+                                    data: [120, 132, 101, 134, 90, 230, 210]
+                                },
+                                {
+                                    name: '联盟广告',
+                                    type: 'line',
+                                    stack: '总量',
+                                    data: [220, 182, 191, 234, 290, 330, 310]
+                                },
+                                {
+                                    name: '视频广告',
+                                    type: 'line',
+                                    stack: '总量',
+                                    data: [150, 232, 201, 154, 190, 330, 410]
+                                },
+                                {
+                                    name: '直接访问',
+                                    type: 'line',
+                                    stack: '总量',
+                                    data: [320, 332, 301, 334, 390, 330, 320]
+                                },
+                                {
+                                    name: '搜索引擎',
+                                    type: 'line',
+                                    stack: '总量',
+                                    data: [820, 932, 901, 934, 1290, 1330, 1320]
+                                }
+                            ]
+                        };
+                        cb.call(_self, data)
+                    }
+                },
+                {
+                    type: 'RATIO',
+                    wrapId: '#chart2',
+                    data: function (cb) {
+                        var _self = this;
+                        var data =  [
+                            {value: 1048, name: '搜索引擎'},
+                            {value: 735, name: '直接访问'},
+                            {value: 580, name: '邮件营销'},
+                            {value: 484, name: '联盟广告'},
+                            {value: 300, name: '视频广告'}
+                        ]
+                        cb.call(_self, data)
+                    },
+
+                    //事件，这里的事件可根据echarts提供的对应事件，key、value传递，底层代理绑定
+                    events: {
+                        click: function (param) {
+                            console.log(param)
+                        }
+                    }
+                },
+                {
+                    type: 'PILLARS',
+                    wrapId: '#chart3',
+                    data: function (cb) {
+                        var _self = this;
+                        var data = {
+                            xAxis:['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                            series: [120, 200, 150, 80, 70, 110, 130]
+                        }
+                        cb.call(_self, data)
+                    }
+                }
+            ]); //批量创建图表
+            chartFactory.getChartsData(); //获取图表数据
+            return chartFactory;
+        }
+
+        _init();
+    </script>
+</body>
+</html>
