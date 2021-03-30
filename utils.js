@@ -16,7 +16,7 @@
     Utils.prototype.extend = function (target, extTarget) {
         //方法
         if (typeof target === 'object') {
-            if (extTarget === 'function') {
+            if (typeof extTarget === 'function') {
                 extTarget.call(target);
                 for (var k in extTarget.prototype) {
                     target.__proto__[k] = extTarget.prototype[k];
