@@ -266,7 +266,7 @@
      */
     ChartCommon.prototype.getData = function (cb) {
         if (typeof this.getDataFn === 'function') {
-            this.getDataFn.call(this, cb || this.setData)
+            this.getDataFn.call(this, this, cb || this.setData)
         }
         return this
     }

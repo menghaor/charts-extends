@@ -62,7 +62,7 @@
                 {
                     type: 'MORE_TREND_LINE',
                     wrapId: '#chart1',
-                    data: function (cb) {
+                    data: function (chart) {
                         var _self = this;
                         var  data = {
                             yUnit: "测试",
@@ -101,14 +101,13 @@
                                 }
                             ]
                         };
-                        cb.call(_self, data)
+                        chart.setData(data)
                     }
                 },
                 {
                     type: 'RATIO',
                     wrapId: '#chart2',
-                    data: function (cb) {
-                        var _self = this;
+                    data: function (chart) {
                         var data =  [
                             {value: 1048, name: '搜索引擎'},
                             {value: 735, name: '直接访问'},
@@ -116,7 +115,7 @@
                             {value: 484, name: '联盟广告'},
                             {value: 300, name: '视频广告'}
                         ]
-                        cb.call(_self, data)
+                        chart.setData(data)
                     },
 
                     //事件，这里的事件可根据echarts提供的对应事件，key、value传递，底层代理绑定
@@ -129,13 +128,12 @@
                 {
                     type: 'PILLARS',
                     wrapId: '#chart3',
-                    data: function (cb) {
-                        var _self = this;
+                    data: function (chart) {
                         var data = {
                             xAxis:['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                             series: [120, 200, 150, 80, 70, 110, 130]
                         }
-                        cb.call(_self, data)
+                        chart.setData(data)
                     }
                 }
             ]); //批量创建图表

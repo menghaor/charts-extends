@@ -1,4 +1,4 @@
-最近公司写几个报表模块，抽出空余时间简单的封装了一下。对原始的echarts进行二次封装、更方便维护、创建、管理；
+最近写几了几个报表模块，抽出空余时间简单的封装了一下。对原始的echarts进行二次封装、更方便维护、创建、管理；
 
 ### 效果
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/2021032212430937.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21lbmdoYW9lcg==,size_16,color_FFFFFF,t_70#pic_center)
@@ -13,6 +13,8 @@
     |-- utils.js                #工具方法
 ```
 
+
+> 提示： 每个图表构造器原型上都有一个 `setData` 方法，此方法应该定义你改图表使用的数据，不应该拿来处理或组装数据，（相当于对外暴露一个接口，必须按照我的格式来设置数据）。
 
 ### 2.使用
 ```html
@@ -80,8 +82,7 @@
                 {
                     type: 'MORE_TREND_LINE', //图表类型，（chart-class.js）中的枚举文件；
                     wrapId: '#chart1',  //图表挂载容器选择器
-                    data: function (cb) { //data可以是你的默认数据，也可以走API去拿
-                        var _self = this;
+                    data: function (chart) { //data可以是你的默认数据，也可以走API去拿
                         var  data = {
                             yUnit: "测试",
                             xAxis: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
@@ -120,14 +121,14 @@
                             ]
                         };
                         
-                        cb.call(_self, data) //调用cb函数，此时的cb === 每个图表的setData方法， 也可以使用 _self.setData(data);
+                      	//备注：当前作用域的 this === chart
+                        chart.setData(data) //这里的setData === 构造器原乡上的setData方法；
                     }
                 },
                 {
                     type: 'RATIO',
                     wrapId: '#chart2',
-                    data: function (cb) {
-                        var _self = this;
+                    data: function (chart) {
                         var data =  [
                             {value: 1048, name: '搜索引擎'},
                             {value: 735, name: '直接访问'},
@@ -135,7 +136,7 @@
                             {value: 484, name: '联盟广告'},
                             {value: 300, name: '视频广告'}
                         ]
-                        cb.call(_self, data)
+                        chart.setData(data)
                     },
 
                     //事件，这里的事件可根据echarts提供的对应事件，key、value传递，底层代理绑定
@@ -148,13 +149,12 @@
                 {
                     type: 'PILLARS',
                     wrapId: '#chart3',
-                    data: function (cb) {
-                        var _self = this;
+                    data: function (chart) {
                         var data = {
                             xAxis:['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                             series: [120, 200, 150, 80, 70, 110, 130]
                         }
-                        cb.call(_self, data)
+                        chart.setData(data)
                     }
                 }
             ]); //批量创建图表
