@@ -4,7 +4,7 @@
  * @Date: 2021-03-19
  */
 
-; (function (win, doc, echarts) {
+; (function (win, doc, echarts, utils) {
     /**
      * 比例图表
      * @param {String} wrapperId 容器id
@@ -116,7 +116,7 @@
      * 
      */
     MoreTrendLine.prototype.setData = function (data) {
-        data = JSON.parse(JSON.stringify(data))
+        data =  JSON.parse(JSON.stringify(data))
         this.option.yAxis.axisLabel.formatter = '{value}' + (data.yUnit || '')
         this.option.series = data.series
         this.option.xAxis.data = data.xAxis
@@ -225,7 +225,7 @@
         this.wrapId = wrapperId
         this.chart = echarts.init(dom)
         this.chart.setOption(this.option)
-        if (Object.prototype.toString.call(data) === '[object Object]') {
+        if (utils.getType(data) === 'object') {
             this.setData(data)
         }
     }
@@ -235,7 +235,7 @@
      * @return {Object}
      */
     ChartCommon.prototype.setOption = function (newOptions) {
-        this.option = newOptions
+        this.option = utils.deepClone(newOptions); //深克隆配置
         this.chart.setOption(newOptions)
         return this;
     }
@@ -274,4 +274,4 @@
     //export
     win.charts = win.charts || charts;
     win.ChartCommon = win.ChartCommon || ChartCommon;
-})(window, document, window.echarts)
+})(window, document, window.echarts, window.utils)

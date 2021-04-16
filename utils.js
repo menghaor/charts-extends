@@ -11,6 +11,18 @@
     }
 
     /**
+     * 获取数据类型
+     * @param {*} data
+     * @return {String} array|object|function...
+     */
+    Utils.prototype.getType = function (data) {
+        return  Object.prototype.toString.call(data)
+            .replace('[object ', '')
+            .slice(0, -1)
+            .toLowerCase();
+    }
+
+    /**
      * 继承
      */
     Utils.prototype.extend = function (target, extTarget) {
@@ -59,6 +71,27 @@
             if (timer) clearTimeout(timer);
             timer = setTimeout(fn.bind(this), wait) 
         }
+    }
+
+    
+    /**
+     * 深度克隆
+     * @param {Array|Object} 拷贝的源数据
+     * @returns {Array|Object}
+     */
+    Utils.prototype.deepClone = function (source) {
+        var res = Array.isArray(source) ? [] : {};
+        var sourceKeys = Object.keys(source);
+        for (var i = 0, len = sourceKeys.length; i < len; i++) {
+            var dataKey = sourceKeys[i];
+            var isReferenceType = ['object', 'array'].indexOf(this.getType(source[dataKey])) !== -1; //是否为引用类型
+            if (isReferenceType) {
+                res[dataKey] = this.deepClone(source[dataKey]);
+            } else {
+                res[dataKey] = source[dataKey];
+            }
+        }
+        return res;
     }
 
     //export

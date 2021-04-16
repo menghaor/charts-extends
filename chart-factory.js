@@ -4,9 +4,25 @@
  * @Date: 2021-03-19
  */
 
-;(function (win, echarts) {
+;(function (win, echarts, utils) {
     function ChartFactory () {
+        if (!(this instanceof ChartFactory)) {
+            throw new Error('The ChartFactory class can only be called using the new form!')
+        }
+        
         this.charts = {} //收集所有的图表
+
+        //图表class
+        this.chartClassMap = {
+            //饼图
+            RATIO: win.charts.Ratio,
+    
+            //走势折线
+            MORE_TREND_LINE: win.charts.MoreTrendLine,
+    
+            //柱状图
+            PILLARS: win.charts.Pillars,
+        }
         this.init()
     }
     
@@ -72,16 +88,7 @@
         chartData,
         events
     ) {
-        var chartClassMap = {
-            //饼图
-            RATIO: charts.Ratio,
-    
-            //走势折线
-            MORE_TREND_LINE: charts.MoreTrendLine,
-    
-            //柱状图
-            PILLARS: charts.Pillars,
-        }
+        var chartClassMap = this.chartClassMap; //图表class
     
         //传入的type是否在map中存在
         if (!Object.prototype.hasOwnProperty.call(chartClassMap, chartType)) {
@@ -99,8 +106,8 @@
             chartInstance.getDataFn = chartData
         }
     
-        //判断事件
-        if (Object.prototype.toString.call(events) === '[object Object]') {
+        //绑定事件事件
+        if (utils.getType(events) === 'object') {
             chartInstance.listen(events)
         }
     
@@ -133,4 +140,4 @@
 
     //export
     win.ChartFactory = win.ChartFactory || ChartFactory;
-})(window, (echarts || window.echarts));
+})(window, (echarts || window.echarts), window.utils);
